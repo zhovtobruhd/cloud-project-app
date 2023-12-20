@@ -23,7 +23,7 @@ def index():
         database = client.get_database_client(database=database_name)
         container = database.get_container_client(container_name)
     except Exception as e:
-        data = str(e)
+        data = [str(e)]
     else:
         try:
             data = [json.dumps(item, indent=True) for item in container.query_items(
@@ -31,9 +31,9 @@ def index():
                 enable_cross_partition_query=True
             )]
         except Exception as e:
-            data = str(e)
+            data = [str(e)]
     print('Request for index page received')
-    return render_template('index.html', value=json.dumps(data))
+    return render_template('index.html', value=data)
 
 
 @app.route('/favicon.ico')
