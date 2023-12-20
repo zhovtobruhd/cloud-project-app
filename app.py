@@ -33,7 +33,7 @@ def index():
         except Exception as e:
             data = str(e)
     print('Request for index page received')
-    return render_template('index.html', value=str(data))
+    return render_template('index.html', value=json.dumps(data))
 
 
 @app.route('/favicon.ico')
