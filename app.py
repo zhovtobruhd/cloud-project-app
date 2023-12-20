@@ -4,7 +4,7 @@ import json
 from flask import (Flask, redirect, render_template, request,
                    send_from_directory, url_for)
 
-from azure.cosmos import exceptions, CosmosClient, PartitionKey
+from azure.cosmos import CosmosClient
 
 
 url = os.environ["ACCOUNT_URI"]
@@ -18,15 +18,20 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    client = CosmosClient(url, key)
-    database = client.get_database_client(database=database_name)
-    container = database.get_container_client(container_name)
-
-
-    data = [json.dumps(item, indent=True) for item in container.query_items(
-        query=f'SELECT * FROM {container_name} c LIMIT 100',
-        enable_cross_partition_query=True
-    )]
+    try:
+        client = CosmosClient(url, key)
+        database = client.get_database_client(database=database_name)
+        container = database.get_container_client(container_name)
+    except Exception as e:
+        data = str(e)
+    else:
+        try:
+            data = [json.dumps(item, indent=True) for item in container.query_items(
+                query=f'SELECT * FROM {container_name} c',
+                enable_cross_partition_query=True
+            )]
+        except Exception as e:
+            data = str(e)
     print('Request for index page received')
     return render_template('index.html', value=str(data))
 
