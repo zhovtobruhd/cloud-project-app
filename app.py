@@ -27,7 +27,7 @@ def index():
     else:
         try:
             data = [json.dumps(item, indent=True) for item in container.query_items(
-                query=f'SELECT * FROM {container_name} c',
+                query=f'SELECT * FROM {container_name} c ORDER BY c.order_date DESC OFFSET 0 LIMIT 10',
                 enable_cross_partition_query=True
             )]
         except Exception as e:
