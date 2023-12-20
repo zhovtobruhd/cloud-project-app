@@ -12,9 +12,11 @@
             <!-- <img  src="/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
             <h1 class="display-6 fw-bold text-primary">Welcome to Azure</h1>
             {% for item in value %}
+              {% if not item.id %}
               <div>
-                  {{ item }}
+                {{ item.id }}
               </div>
+              {% endif %}
             {% endfor %}           
           </div>
         <form method="post" action="{{url_for('hello')}}">
