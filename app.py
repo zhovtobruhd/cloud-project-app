@@ -1,5 +1,4 @@
 import os
-import json
 
 from flask import (Flask, redirect, render_template, request,
                    send_from_directory, url_for)
@@ -22,7 +21,7 @@ def index():
         client = CosmosClient(url, key)
         database = client.get_database_client(database=database_name)
         container = database.get_container_client(container_name)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         data = [
                 {
                     "id": str(e)
@@ -34,7 +33,7 @@ def index():
                 query=f'SELECT * FROM {container_name} c ORDER BY c._ts DESC OFFSET 0 LIMIT 10',
                 enable_cross_partition_query=True
             )]
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             data = [
                 {
                     "id": str(e)

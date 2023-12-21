@@ -22,7 +22,7 @@
                 </thead>
                 <tbody>
                   {% for key, value in item.items() %}
-                  {% if not key.startswith("_")}
+                  {% if not key.startswith("_") %}
                   <tr>
                     <td>{{ key }}</td>
                     <td>{{ value }}</td>
