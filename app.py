@@ -31,7 +31,7 @@ def index():
     else:
         try:
             data = [item for item in container.query_items(
-                query=f'SELECT * FROM {container_name} c ORDER BY c.order_date DESC OFFSET 0 LIMIT 10',
+                query=f'SELECT * FROM {container_name} c ORDER BY c._ts DESC OFFSET 0 LIMIT 10',
                 enable_cross_partition_query=True
             )]
         except Exception as e:
