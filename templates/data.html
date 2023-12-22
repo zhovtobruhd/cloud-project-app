@@ -11,6 +11,8 @@
             <img class="d-block mx-auto mb-4" src="{{ url_for('static', filename='images/azure-icon.svg') }}" alt="Azure Logo" width="192" height="192"/>
             <!-- <img  src="/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
             <h1 class="display-6 fw-bold text-primary">Requested Data</h1>
+            {{ start_date }}
+            {{ end_date }}
             <div>             
               {% for item in value %}
               <table>
