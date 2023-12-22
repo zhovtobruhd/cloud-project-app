@@ -39,7 +39,7 @@ def plot_to_uri():
 
     b = base64.b64encode(svg_data) # bytes
     svg_base64 = "data:image/svg+xml;base64," + b.decode().strip()
-
+    print(svg_base64)
     return svg_base64
 
 @app.route('/')
