@@ -3,3 +3,4 @@ Werkzeug==2.2.2
 gunicorn
 pytest
 azure-cosmos
+matplotlib

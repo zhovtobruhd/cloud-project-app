@@ -1,10 +1,13 @@
 import os
+import io
 import datetime
 
 from flask import (Flask, redirect, render_template, request,
                    send_from_directory, url_for)
 
 from azure.cosmos import CosmosClient
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_svg import FigureCanvasSVG
 
 
 url = os.environ["ACCOUNT_URI"]
@@ -14,7 +17,27 @@ container_name = os.environ["CONTAINER_NAME"]
 
 app = Flask(__name__)
 
+def plot_to_uri():
+    # Create a simple Matplotlib plot
+    x = [1, 2, 3, 4, 5]
+    y = [2, 3, 5, 7, 11]
 
+    fig, ax = plt.subplots()
+    ax.plot(x, y)
+    ax.set_xlabel('X-axis')
+    ax.set_ylabel('Y-axis')
+    ax.set_title('Matplotlib Plot')
+
+    # Convert the plot to SVG format
+    output = io.BytesIO()
+    FigureCanvasSVG(fig).print_svg(output)
+    svg_data = output.getvalue()
+    output.close()
+
+    # Encode the SVG data to base64
+    svg_base64 = "data:image/svg+xml;base64," + svg_data.decode('utf-8').encode('base64').strip()
+
+    return svg_base64
 
 @app.route('/')
 def index():
@@ -81,7 +104,7 @@ def process_dates():
                 }
             ]
 
-    return render_template('data.html', value=data, start_date=start_date, end_date=end_date)
+    return render_template('data.html', value=data, start_date=start_date, end_date=end_date, img=plot_to_uri())
 
 @app.route('/hello', methods=['POST'])
 def hello():
