@@ -20,6 +20,7 @@ jobs:
         pip install pylint
         pip install pylint-fail-under
         pip install -r requirements.txt
+        pip install -r requirements_test.txt
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py' ':!:tests/**') --fail-under=8.0
