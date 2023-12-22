@@ -1,6 +1,7 @@
 import os
 import io
 import datetime
+import base64
 
 from flask import (Flask, redirect, render_template, request,
                    send_from_directory, url_for)
@@ -35,7 +36,9 @@ def plot_to_uri():
     output.close()
 
     # Encode the SVG data to base64
-    svg_base64 = "data:image/svg+xml;base64," + svg_data.decode('utf-8').encode('base64').strip()
+
+    b = base64.b64encode(svg_data) # bytes
+    svg_base64 = "data:image/svg+xml;base64," + b.strip()
 
     return svg_base64
 
