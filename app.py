@@ -49,6 +49,36 @@ def favicon():
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
+@app.route('/process_dates', methods=['POST'])
+def process_dates():
+    start_date = request.form.get('start_date')
+    end_date = request.form.get('end_date')
+
+    try:
+        client = CosmosClient(url, key)
+        database = client.get_database_client(database=database_name)
+        container = database.get_container_client(container_name)
+    except Exception as e:  # pylint: disable=broad-except
+        data = [
+                {
+                    "id": str(e)
+                }
+            ]
+    else:
+        try:
+            data = [item for item in container.query_items(
+                query=f'SELECT * FROM {container_name} c ORDER BY c._ts DESC OFFSET 0 LIMIT 10',
+                enable_cross_partition_query=True
+            )]
+        except Exception as e:  # pylint: disable=broad-except
+            data = [
+                {
+                    "id": str(e)
+                }
+            ]
+
+    return render_template('data.html', value=data, start_date=start_date, end_date=end_date)
+
 @app.route('/hello', methods=['POST'])
 def hello():
     name = request.form.get('name')
