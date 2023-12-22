@@ -1,0 +1,4 @@
+pytest
+azure-functions
+azure-cosmos
+azure-iot-device
