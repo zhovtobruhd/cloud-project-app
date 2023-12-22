@@ -2,9 +2,17 @@ name: Test
 
 on:
   workflow_run:
-    workflows: [pylint]
+    workflows: [deploy]
     types: [completed]
     branches: [deploy]
+
+env:
+  ACCOUNT_URI: ${{ secrets.ACCOUNT_URI }}
+  ACCOUNT_KEY: ${{ secrets.ACCOUNT_KEY }}
+  DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+  CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
+  DEVICE_CONNECTION_STRING: ${{ secrets.DEVICE_CONNECTION_STRING }}
+
 
 jobs:
   build:
