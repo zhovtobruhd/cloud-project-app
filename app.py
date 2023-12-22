@@ -1,4 +1,5 @@
 import os
+import datetime
 
 from flask import (Flask, redirect, render_template, request,
                    send_from_directory, url_for)
@@ -51,8 +52,11 @@ def favicon():
 
 @app.route('/process_dates', methods=['POST'])
 def process_dates():
-    start_date = request.form.get('start_date')
-    end_date = request.form.get('end_date')
+    start_date = int(datetime.datetime.strptime(request.form.get('start_date'), "%Y-%m-%dT%H:%M").timestamp())
+    end_date = int(datetime.datetime.strptime(request.form.get('end_date'), "%Y-%m-%dT%H:%M").timestamp())
+
+    if start_date > end_date:
+        start_date, end_date = end_date, start_date
 
     try:
         client = CosmosClient(url, key)
@@ -67,7 +71,7 @@ def process_dates():
     else:
         try:
             data = [item for item in container.query_items(
-                query=f'SELECT * FROM {container_name} c ORDER BY c._ts DESC OFFSET 0 LIMIT 10',
+                query=f'SELECT * FROM {container_name} c WHERE c._ts BETWEEN {start_date} AND {end_date} ORDER BY c._ts DESC OFFSET 0 LIMIT 1000',
                 enable_cross_partition_query=True
             )]
         except Exception as e:  # pylint: disable=broad-except
