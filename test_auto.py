@@ -70,7 +70,7 @@ def main():
                 enable_cross_partition_query=True
             ))
 
-        msg = d[-1]['payload']
+        msg = d[-1]
         print("Message received from Cosmos DB: %s", msg)
 
     except Exception as e:  # pylint: disable=broad-except

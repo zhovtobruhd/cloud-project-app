@@ -18,10 +18,14 @@ container_name = os.environ["CONTAINER_NAME"]
 
 app = Flask(__name__)
 
-def plot_to_uri():
+def plot_to_uri(dic):
     # Create a simple Matplotlib plot
-    x = [1, 2, 3, 4, 5]
-    y = [2, 3, 5, 7, 11]
+    x = []
+    y = []
+
+    for i, v in enumerate(reversed(dic)):
+        x.append(i)
+        y.append(v['data'])
 
     fig, ax = plt.subplots(figsize=(8,6))
     ax.plot(x, y)
@@ -44,30 +48,8 @@ def plot_to_uri():
 
 @app.route('/')
 def index():
-    try:
-        client = CosmosClient(url, key)
-        database = client.get_database_client(database=database_name)
-        container = database.get_container_client(container_name)
-    except Exception as e:  # pylint: disable=broad-except
-        data = [
-                {
-                    "id": str(e)
-                }
-            ]
-    else:
-        try:
-            data = [item for item in container.query_items(
-                query=f'SELECT * FROM {container_name} c ORDER BY c._ts DESC OFFSET 0 LIMIT 10',
-                enable_cross_partition_query=True
-            )]
-        except Exception as e:  # pylint: disable=broad-except
-            data = [
-                {
-                    "id": str(e)
-                }
-            ]
     print('Request for index page received')
-    return render_template('index.html', value=data)
+    return render_template('index.html')
 
 
 @app.route('/favicon.ico')
@@ -107,7 +89,7 @@ def process_dates():
                 }
             ]
 
-    return render_template('data.html', value=data, start_date=start_date, end_date=end_date, img=plot_to_uri())
+    return render_template('data.html', value=data, start_date=start_date, end_date=end_date, img=plot_to_uri(data))
 
 @app.route('/hello', methods=['POST'])
 def hello():
