@@ -38,7 +38,7 @@ def plot_to_uri():
     # Encode the SVG data to base64
 
     b = base64.b64encode(svg_data) # bytes
-    svg_base64 = "data:image/svg+xml;base64," + b.strip()
+    svg_base64 = "data:image/svg+xml;base64," + b.decode().strip()
 
     return svg_base64
 
