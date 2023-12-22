@@ -97,7 +97,7 @@ def process_dates():
     else:
         try:
             data = [item for item in container.query_items(
-                query=f'SELECT * FROM {container_name} c WHERE c._ts BETWEEN {start_date} AND {end_date} ORDER BY c._ts DESC OFFSET 0 LIMIT 1000',
+                query=f'SELECT * FROM {container_name} c WHERE (c._ts BETWEEN {start_date} AND {end_date}) AND (IS_DEFINED(c.data)) ORDER BY c._ts DESC OFFSET 0 LIMIT 1000',
                 enable_cross_partition_query=True
             )]
         except Exception as e:  # pylint: disable=broad-except
