@@ -23,7 +23,7 @@ def plot_to_uri():
     x = [1, 2, 3, 4, 5]
     y = [2, 3, 5, 7, 11]
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(8,6))
     ax.plot(x, y)
     ax.set_xlabel('X-axis')
     ax.set_ylabel('Y-axis')
